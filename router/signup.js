@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const SignUp = require("../modals/signUp");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt"); 
 
 router.post("/signup", async (req, res) => {
   try {
