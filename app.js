@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const signUp = require("./router/signup");
+const products = require('./router/product')
 
 mongoose
   .connect(
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/", signUp);
+app.use("/" , products)
 
 app.use((req, res) => {
   res.status(404).json({
