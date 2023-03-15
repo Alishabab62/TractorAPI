@@ -5,6 +5,8 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const Product = require("../modals/products");
 const { body, validationResult } = require("express-validator");
+const products = require("../modals/products");
+const { findByIdAndUpdate } = require("../modals/products");
 
 const Storage = multer.diskStorage({
   destination: "uploads",
@@ -17,6 +19,8 @@ const Storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: Storage }).single("image");
+  
+// for posting products
 
 router.post(
   "/upload",
@@ -55,5 +59,44 @@ router.post(
     }
   }
 );
+
+// for getting all products
+
+try{
+  router.get("/get/products" , async(req,res)=>{
+    const data = await products.find();
+    res.status(200).json({data:data})
+  })
+}
+catch(error){
+  console.log(error)
+}
+
+
+router.post("/product/:_id/reviews", async (req, res) => {
+  const { _id } = req.params;
+  const { review } = req.body;
+  
+  try {
+    const product = await Product.findOneAndUpdate(
+      { _id },
+      { $push: { reviews: review } },
+      { new: true }
+    );
+    
+    res.status(200).json({
+      success: true,
+      message: `Review added for product with ID: ${_id}`,
+      product,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Error adding review",
+    });
+  }
+});
+
 
 module.exports = router;
