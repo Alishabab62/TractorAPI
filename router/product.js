@@ -28,7 +28,20 @@ router.post("/upload", async (req, res) => {
 
 router.get("/get/products", async (req, res) => {
   try {
-    const data = await Product.find();
+    const filter = {}
+    if(req.query.tractor){
+      filter.tractor = req.query.tractor
+    }
+
+    if(req.query.brand){
+      filter.brand = req.query.brand
+    }
+
+    if(req.query.name){
+      filter.name = req.query.name
+    }
+    
+    const data = await Product.find(filter);
     res.status(200).json({ products:data });
   } catch (error) {
     console.log(error);
