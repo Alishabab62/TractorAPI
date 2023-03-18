@@ -24,6 +24,8 @@ app.use(cors());
 app.use("/", signUp);
 app.use("/" , products)
 
+
+
 app.use((req, res) => {
   res.status(404).json({
     error: "bad request",
