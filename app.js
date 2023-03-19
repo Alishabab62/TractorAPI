@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const signUp = require("./router/signup");
 const products = require('./router/product')
+const wishlist = require("./router/wishlist")
 
 mongoose
   .connect(
@@ -22,7 +23,8 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/", signUp);
-app.use("/" , products)
+app.use("/" , products);
+app.use("/",wishlist)
 
 
 
