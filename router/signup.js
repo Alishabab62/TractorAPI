@@ -48,10 +48,13 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ message: "Email or password is incorrect" });
     }
-    jwt.sign(req.body,secretKey,{expiresIn:"3000s"},(err,token)=>{
+    jwt.sign(req.body,secretKey,{expiresIn:"300s"},(err,token)=>{
+      if(err){
+        console.log(err)
+      }
       res
         .status(200)
-        .json({ id: user._id ,token:token,user:user.fname} );
+        .json({data:{id: user._id ,token:token,user:user.fname , email:user.email}});
     })
   } catch (error) {
     console.error(error);
