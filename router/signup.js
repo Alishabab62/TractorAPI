@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ message: "Email or password is incorrect" });
     }
-    jwt.sign(req.body,secretKey,{expiresIn:"300s"},(err,token)=>{
+    jwt.sign(req.body,secretKey,{expiresIn:"3600s"},(err,token)=>{
       if(err){
         console.log(err)
       }
