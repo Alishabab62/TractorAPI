@@ -71,11 +71,11 @@ router.get("/wishlist/get/:token/:user", async (req, res) => {
   }
 });
 
-router.delete("/wishlist/update/:id/:productId", async (req, res) => {
+router.delete("/wishlist/update/:user/:productId", async (req, res) => {
   try {
-    const userId = req.params.id;
+    const user = req.params.user;
     const productId = req.params.productId;
-    let userWishlist = await WishlistModel.findById({ _id: userId });
+    let userWishlist = await WishlistModel.findOne({ user: user });
     const updatedProductList = userWishlist.product.filter(
       (product) => product._id != productId
     ); 
