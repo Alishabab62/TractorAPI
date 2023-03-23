@@ -4,6 +4,7 @@ const WishlistModel = require("../modals/wishlist");
 const products = require("../modals/products");
 const jwt = require("jsonwebtoken");
 const { find } = require("../modals/products");
+const { findByIdAndDelete } = require("../modals/wishlist");
 const secretKey = "secretKey";
 
 router.post("/wishlist/:token", async (req, res) => {
@@ -70,24 +71,23 @@ router.get("/wishlist/get/:token/:user", async (req, res) => {
   }
 });
 
-router.put("/wishlist/update/:id/:productId", async (req, res) => {
+router.delete("/wishlist/update/:id/:productId", async (req, res) => {
   try {
-    const wishlist = await WishlistModel.findById(req.params.id);
-    const updatedProductIndex = wishlist.product.findIndex(
-      (p) => p._id.toString() === req.params.productId.toString()
-    );
-    if (updatedProductIndex === -1) {
-      return res.status(404).json({ msg: "Product not found in wishlist" });
-    }
-    const updatedProduct = { ...wishlist.product[updatedProductIndex], ...req.body };
-    wishlist.product.set(updatedProductIndex, updatedProduct);
-    const updatedWishlist = await wishlist.save();
-    res.status(200).json(updatedWishlist.product[updatedProductIndex]);
+    const userId = req.params.id;
+    const productId = req.params.productId;
+    let userWishlist = await WishlistModel.findById({ _id: userId });
+    const updatedProductList = userWishlist.product.filter(
+      (product) => product._id != productId
+    ); 
+    userWishlist.product = updatedProductList;
+    await userWishlist.save(); 
+    res.status(200).send("Product removed from wishlist");
   } catch (error) {
     console.log(error);
     res.status(500).send("Error updating product in wishlist");
   }
 });
+
 
 
 
